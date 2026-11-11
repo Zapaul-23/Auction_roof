@@ -85,7 +85,7 @@ class Products::StepsControllerTest < ActionDispatch::IntegrationTest
     patch product_step_path(@product, "pricing"),
           params: { save_draft: "1", product: { starting_price: "", reserve_price: "" } }
 
-    assert_redirected_to root_path
+    assert_redirected_to seller_products_path
     assert_nil @product.reload.starting_price
     assert @product.draft?
   end

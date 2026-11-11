@@ -50,7 +50,7 @@ class Products::StepsController < ApplicationController
     def after_step_path
       if saving_draft?
         flash[:notice] = "Draft saved. You can continue later."
-        root_path
+        seller_products_path
       elsif (next_step = Product.next_step(@step))
         product_step_path(@product, next_step)
       else

@@ -1,0 +1,58 @@
+<% content_for :title, "My products" %>
+
+<div class="page-header">
+  <h1>My products</h1>
+  <%= link_to "+ Sell an item", new_product_path, class: "button" %>
+</div>
+
+<nav class="tabs" aria-label="Filter by status">
+  <%= link_to "All (#{@counts.values.sum})", seller_products_path, class: [ "tab", { "tab-active": @status.nil? } ] %>
+  <% Product.statuses.each_key do |status| %>
+    <%= link_to "#{status.humanize} (#{@counts.fetch(status, 0)})", seller_products_path(status: status),
+          class: [ "tab", { "tab-active": @status == status } ] %>
+  <% end %>
+</nav>
+
+<% if @products.any? %>
+  <ul class="seller-products">
+    <% @products.each do |product| %>
+      <li class="seller-product card" id="<%= dom_id(product) %>">
+        <div class="seller-product-thumb">
+          <% if (cover = product.cover_image) %>
+            <%= image_tag url_for(cover), alt: "" %>
+          <% else %>
+            <span class="muted">No photo</span>
+          <% end %>
+        </div>
+
+        <div class="seller-product-info">
+          <div class="review-header">
+            <strong><%= product.title %></strong>
+            <%= render "products/status_badge", product: product %>
+          </div>
+          <div class="muted">
+            <%= product.category.name %> ·
+            <%= product.priced? ? number_to_currency(product.starting_price, unit: "฿") : "No price yet" %> ·
+            updated <%= time_ago_in_words(product.updated_at) %> ago
+          </div>
+        </div>
+
+        <div class="seller-product-actions">
+          <% if product.draft? %>
+            <%= link_to "Edit", product_step_path(product, Product::STEPS.first), class: "button button-small button-secondary" %>
+            <%= link_to "Review & publish", new_product_publication_path(product), class: "button button-small" %>
+            <%= button_to "Delete", seller_product_path(product), method: :delete, class: "button button-small button-danger",
+                  form_class: "inline", form: { data: { turbo_confirm: "Delete this draft permanently?" } } %>
+          <% else %>
+            <%= link_to "Manage", new_product_publication_path(product), class: "button button-small button-secondary" %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="card empty-state">
+    <p>You have no <%= @status ? "#{@status} " : "" %>products yet.</p>
+    <%= link_to "Sell your first item", new_product_path, class: "button" %>
+  </div>
+<% end %>

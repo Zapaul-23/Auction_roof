@@ -29,6 +29,7 @@
         <%= link_to "Auction Roof", root_path, class: "brand" %>
         <div class="nav-links">
           <% if authenticated? %>
+            <%= link_to "My products", seller_products_path %>
             <%= link_to "Sell an item", new_product_path, class: "button button-small" %>
             <span class="muted"><%= Current.user.name %></span>
             <%= button_to "Sign out", session_path, method: :delete, class: "link-button" %>
