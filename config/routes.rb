@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resource :registration, only: %i[ new create ]
   resources :passwords, param: :token
 
-  resources :products, only: %i[ index new create ] do
+  resources :products, only: %i[ index show new create ] do
     scope module: :products do
       resources :steps, only: %i[ show update ]
       resource :publication, only: %i[ new create destroy ]

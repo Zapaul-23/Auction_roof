@@ -141,5 +141,34 @@ form.inline { display: inline; margin: 0; }
   .seller-product-actions { grid-column: 1 / -1; justify-content: flex-start; }
 }
 
-/* Product list */
-.product-list { list-style: none; padding: 0; display: grid; gap: 8px; }
+/* Product cards (home) */
+.product-cards { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.product-card { padding: 0; overflow: hidden; }
+.product-card-link { display: grid; color: inherit; text-decoration: none; }
+.product-card-link:hover .product-card-title { text-decoration: underline; }
+.product-card-image { aspect-ratio: 4 / 3; background: var(--bg); display: grid; place-items: center; overflow: hidden; }
+.product-card-image img { width: 100%; height: 100%; object-fit: cover; }
+.product-card-body { display: grid; gap: 2px; padding: 12px 14px 14px; }
+.product-category { font-size: 0.85rem; }
+.price { font-size: 1.15rem; font-weight: 700; color: var(--primary); }
+
+/* Product page */
+.product-page { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.product-gallery-main { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; aspect-ratio: 1; display: grid; place-items: center; }
+.product-gallery-main img { width: 100%; height: 100%; object-fit: contain; }
+.product-gallery-thumbs { list-style: none; padding: 0; margin: 12px 0 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.product-gallery-thumbs button { padding: 0; border: 2px solid transparent; border-radius: 8px; overflow: hidden; width: 72px; height: 72px; cursor: pointer; background: var(--bg); }
+.product-gallery-thumbs button.is-active { border-color: var(--primary); }
+.product-gallery-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.product-details h1 { margin-bottom: 16px; }
+.product-details h2 { font-size: 1.1rem; margin: 20px 0 8px; }
+.product-category { margin: 0 0 4px; }
+.price-box { display: grid; gap: 2px; margin-bottom: 16px; }
+.price-box .price { font-size: 1.8rem; }
+.product-description { overflow-wrap: anywhere; }
+.seller-box { margin-top: 20px; }
+.seller-box h2 { margin-top: 0; }
+.seller-box p { margin: 0 0 4px; }
+@media (max-width: 760px) {
+  .product-page { grid-template-columns: 1fr; gap: 20px; }
+}

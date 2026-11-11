@@ -36,11 +36,13 @@
     <% end %>
 
     <div class="form-actions">
+      <%= link_to "Preview", product_path(@product), class: "button button-secondary" %>
       <%= link_to "Edit", product_step_path(@product, Product::STEPS.first), class: "button button-secondary" %>
       <%= button_to "Publish", product_publication_path(@product), class: "button", disabled: @blockers.any? %>
     </div>
   <% else %>
     <div class="form-actions">
+      <%= link_to "View public page", product_path(@product), class: "button" %>
       <%= button_to "Unpublish", product_publication_path(@product), method: :delete, class: "button button-secondary",
             form: { data: { turbo_confirm: "Take this product off the site and move it back to drafts?" } } %>
     </div>
