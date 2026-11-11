@@ -1,6 +1,8 @@
 class Product < ApplicationRecord
+  include Product::Images
+
   # Order of the "create product" wizard. Each step validates its own fields.
-  STEPS = %w[ details pricing ].freeze
+  STEPS = %w[ details images pricing ].freeze
 
   belongs_to :seller, class_name: "User", inverse_of: :products
   belongs_to :category

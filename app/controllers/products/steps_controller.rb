@@ -8,7 +8,12 @@ class Products::StepsController < ApplicationController
   end
 
   def update
-    @product.assign_attributes(step_params)
+    if @step == "images"
+      # Add the new uploads to the existing ones instead of replacing them.
+      @product.images.attach(new_images) if new_images.any?
+    else
+      @product.assign_attributes(step_params)
+    end
 
     if @product.save(context: @step.to_sym)
       redirect_to after_step_path
@@ -32,6 +37,10 @@ class Products::StepsController < ApplicationController
       when "details" then params.expect(product: %i[ title description category_id condition ])
       when "pricing" then params.expect(product: %i[ starting_price reserve_price ])
       end
+    end
+
+    def new_images
+      @new_images ||= Array(params.dig(:product, :images)).compact_blank
     end
 
     def after_step_path

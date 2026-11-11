@@ -98,5 +98,18 @@ main.container { padding-top: 24px; padding-bottom: 48px; }
 .wizard-step-current { background: var(--primary); color: #fff; font-weight: 600; }
 .wizard-step-done { background: var(--success-bg); color: var(--success-text); }
 
+/* Images */
+.label { font-weight: 600; margin: 0 0 6px; }
+.image-gallery-edit { margin-bottom: 20px; }
+.image-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.image-grid-preview:empty { display: none; }
+.image-tile { position: relative; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: grid; }
+.image-tile img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.image-caption { font-size: 0.8rem; padding: 4px 8px; color: var(--muted); overflow-wrap: anywhere; }
+.image-actions { display: flex; gap: 4px; padding: 6px; flex-wrap: wrap; }
+.image-actions .button:disabled { opacity: 0.4; cursor: default; }
+form.inline { display: inline; margin: 0; }
+.badge { position: absolute; top: 6px; left: 6px; background: var(--primary); color: #fff; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+
 /* Product list */
 .product-list { list-style: none; padding: 0; display: grid; gap: 8px; }

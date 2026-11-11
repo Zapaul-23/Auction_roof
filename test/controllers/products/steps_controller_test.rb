@@ -7,6 +7,8 @@ class Products::StepsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "shows each step" do
+    @product.images.attach(io: file_fixture("photo.png").open, filename: "photo.png")
+
     Product::STEPS.each do |step|
       get product_step_path(@product, step)
       assert_response :success
@@ -34,6 +36,31 @@ class Products::StepsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to product_step_path(@product, Product.next_step(:details))
     assert_equal "Rangefinder camera", @product.reload.title
+  end
+
+  test "images step uploads photos and keeps existing ones" do
+    @product.images.attach(io: file_fixture("photo.png").open, filename: "existing.png")
+
+    patch product_step_path(@product, "images"),
+          params: { product: { images: [ fixture_file_upload("photo.png", "image/png") ] } }
+
+    assert_redirected_to product_step_path(@product, "pricing")
+    assert_equal 2, @product.reload.images.count
+  end
+
+  test "images step requires at least one photo" do
+    patch product_step_path(@product, "images"), params: { product: { images: [ "" ] } }
+
+    assert_response :unprocessable_entity
+    assert_select ".form-errors", /at least one photo/
+  end
+
+  test "images step rejects non-image files" do
+    patch product_step_path(@product, "images"),
+          params: { product: { images: [ fixture_file_upload("notes.txt", "text/plain") ] } }
+
+    assert_response :unprocessable_entity
+    assert_equal 0, @product.reload.images.count
   end
 
   test "pricing step requires a starting price" do

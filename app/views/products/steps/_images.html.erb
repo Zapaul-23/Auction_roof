@@ -1,0 +1,10 @@
+<%# locals: (form:) %>
+<div class="field" data-controller="image-preview">
+  <%= form.label :images, form.object.ordered_images.any? ? "Add more photos" : "Photos" %>
+  <%= form.file_field :images, multiple: true, accept: Product::IMAGE_CONTENT_TYPES.join(","),
+        data: { image_preview_target: "input", action: "change->image-preview#show" } %>
+  <small class="muted">
+    JPG, PNG or WebP, up to <%= Product::MAX_IMAGE_SIZE / 1.megabyte %> MB each, max <%= Product::MAX_IMAGES %> photos.
+  </small>
+  <ul class="image-grid image-grid-preview" data-image-preview-target="preview" aria-live="polite"></ul>
+</div>

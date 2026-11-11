@@ -4,7 +4,12 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
 
   resources :products, only: %i[ index new create ] do
-    resources :steps, only: %i[ show update ], module: :products
+    scope module: :products do
+      resources :steps, only: %i[ show update ]
+      resources :images, only: %i[ destroy ] do
+        patch :move, on: :member
+      end
+    end
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
