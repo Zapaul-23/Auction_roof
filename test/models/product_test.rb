@@ -3,7 +3,7 @@ require "test_helper"
 class ProductTest < ActiveSupport::TestCase
   def build_product(**attrs)
     Product.new({ title: "Lamp", description: "Desk lamp", condition: "used",
-                  starting_price: 100, seller: users(:one) }.merge(attrs))
+                  starting_price: 100, seller: users(:one), category: categories(:electronics) }.merge(attrs))
   end
 
   test "fixture is valid" do
@@ -32,6 +32,10 @@ class ProductTest < ActiveSupport::TestCase
 
   test "condition must be a known value" do
     assert_not build_product(condition: "broken").valid?
+  end
+
+  test "requires a category" do
+    assert_not build_product(category: nil).valid?
   end
 
   test "belongs to a seller" do

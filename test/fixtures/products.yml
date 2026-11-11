@@ -5,6 +5,7 @@ camera:
   starting_price: 1500
   reserve_price: 3000
   seller: one
+  category: electronics
 
 watch:
   title: Diver watch
@@ -12,3 +13,4 @@ watch:
   condition: like_new
   starting_price: 5000
   seller: two
+  category: fashion

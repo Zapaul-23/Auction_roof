@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   belongs_to :seller, class_name: "User", inverse_of: :products
+  belongs_to :category
 
   enum :condition, { brand_new: "new", like_new: "like_new", used: "used", for_parts: "for_parts" }, validate: true
 
