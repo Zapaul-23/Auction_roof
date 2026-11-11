@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_11_065537) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_11_065720) do
   create_table "categories", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -24,7 +24,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_065537) do
     t.string "title", null: false
     t.text "description", null: false
     t.string "condition", default: "used", null: false
-    t.decimal "starting_price", precision: 12, scale: 2, null: false
+    t.decimal "starting_price", precision: 12, scale: 2
     t.decimal "reserve_price", precision: 12, scale: 2
     t.integer "seller_id", null: false
     t.datetime "created_at", null: false
@@ -48,6 +48,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_065537) do
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", default: "", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 

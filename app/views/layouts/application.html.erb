@@ -24,6 +24,28 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="site-header">
+      <nav class="container nav">
+        <%= link_to "Auction Roof", root_path, class: "brand" %>
+        <div class="nav-links">
+          <% if authenticated? %>
+            <%= link_to "Sell an item", new_product_path, class: "button button-small" %>
+            <span class="muted"><%= Current.user.name %></span>
+            <%= button_to "Sign out", session_path, method: :delete, class: "link-button" %>
+          <% else %>
+            <%= link_to "Sign in", new_session_path %>
+            <%= link_to "Sign up", new_registration_path, class: "button button-small" %>
+          <% end %>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <% flash.each do |type, message| %>
+        <%= tag.div message, class: "flash flash-#{type}" %>
+      <% end %>
+
+      <%= yield %>
+    </main>
   </body>
 </html>

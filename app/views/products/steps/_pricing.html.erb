@@ -1,0 +1,12 @@
+<%# locals: (form:) %>
+<div class="field">
+  <%= form.label :starting_price, "Starting price (฿)" %>
+  <%= form.number_field :starting_price, min: 0.01, step: 0.01, required: true, autofocus: true %>
+  <small class="muted">Bidding starts at this amount.</small>
+</div>
+
+<div class="field">
+  <%= form.label :reserve_price, "Reserve price (฿, optional)" %>
+  <%= form.number_field :reserve_price, min: 0.01, step: 0.01 %>
+  <small class="muted">The item will not sell below this price. Leave empty for no reserve.</small>
+</div>

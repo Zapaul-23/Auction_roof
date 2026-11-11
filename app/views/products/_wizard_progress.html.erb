@@ -1,0 +1,13 @@
+<%# locals: (product:, current:) %>
+<ol class="wizard-steps">
+  <% Product::STEPS.each_with_index do |step, index| %>
+    <% state = step == current ? "current" : (Product::STEPS.index(current) > index ? "done" : "todo") %>
+    <li class="wizard-step wizard-step-<%= state %>">
+      <% if product.persisted? && state != "current" %>
+        <%= link_to "#{index + 1}. #{step.humanize}", product_step_path(product, step) %>
+      <% else %>
+        <span><%= index + 1 %>. <%= step.humanize %></span>
+      <% end %>
+    </li>
+  <% end %>
+</ol>

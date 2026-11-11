@@ -1,0 +1,20 @@
+<%# locals: (form:) %>
+<div class="field">
+  <%= form.label :title %>
+  <%= form.text_field :title, required: true, maxlength: 150, autofocus: true %>
+</div>
+
+<div class="field">
+  <%= form.label :category_id, "Category" %>
+  <%= form.collection_select :category_id, Category.ordered, :id, :name, { prompt: "Choose a category" }, required: true %>
+</div>
+
+<div class="field">
+  <%= form.label :condition %>
+  <%= form.select :condition, Product.conditions.keys.map { |key| [ key.humanize, key ] }, {}, required: true %>
+</div>
+
+<div class="field">
+  <%= form.label :description %>
+  <%= form.text_area :description, rows: 6, required: true %>
+</div>

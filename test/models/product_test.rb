@@ -20,8 +20,14 @@ class ProductTest < ActiveSupport::TestCase
   test "starting price must be greater than zero" do
     assert_not build_product(starting_price: 0).valid?
     assert_not build_product(starting_price: -5).valid?
-    assert_not build_product(starting_price: nil).valid?
     assert build_product(starting_price: 0.01).valid?
+  end
+
+  test "starting price may be empty until the pricing step" do
+    product = build_product(starting_price: nil)
+    assert product.valid?
+    assert_not product.valid?(:pricing)
+    assert_not product.priced?
   end
 
   test "reserve price is optional but cannot be below starting price" do
@@ -42,5 +48,12 @@ class ProductTest < ActiveSupport::TestCase
     assert_not build_product(seller: nil).valid?
     assert_equal users(:one), products(:camera).seller
     assert_includes users(:one).products, products(:camera)
+  end
+
+  test "wizard step navigation" do
+    assert_equal Product::STEPS.second, Product.next_step(Product::STEPS.first)
+    assert_nil Product.next_step(Product::STEPS.last)
+    assert_nil Product.previous_step(Product::STEPS.first)
+    assert_equal Product::STEPS.first, Product.previous_step(Product::STEPS.second)
   end
 end
