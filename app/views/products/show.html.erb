@@ -1,0 +1,71 @@
+<% content_for :title, @product.title %>
+<% images = @product.ordered_images %>
+
+<% if @product.draft? %>
+  <div class="flash flash-alert">
+    This is a preview of your draft. Buyers can't see it until you
+    <%= link_to "publish it", new_product_publication_path(@product) %>.
+  </div>
+<% end %>
+
+<article class="product-page">
+  <section class="product-gallery" data-controller="gallery" aria-label="Photos">
+    <% if images.any? %>
+      <div class="product-gallery-main">
+        <%= image_tag url_for(images.first), alt: @product.title, data: { gallery_target: "main" } %>
+      </div>
+      <% if images.size > 1 %>
+        <ul class="product-gallery-thumbs">
+          <% images.each_with_index do |image, index| %>
+            <li>
+              <button type="button" class="<%= "is-active" if index.zero? %>" aria-label="Show photo <%= index + 1 %>"
+                      data-gallery-target="thumb" data-action="gallery#select" data-gallery-src-param="<%= url_for(image) %>">
+                <%= image_tag url_for(image), alt: "" %>
+              </button>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% else %>
+      <div class="product-gallery-main product-gallery-empty muted">No photos</div>
+    <% end %>
+  </section>
+
+  <section class="product-details">
+    <p class="muted product-category"><%= @product.category.name %></p>
+    <h1><%= @product.title %></h1>
+
+    <div class="card price-box">
+      <span class="muted">Starting bid</span>
+      <strong class="price">
+        <%= @product.priced? ? number_to_currency(@product.starting_price, unit: "฿") : "—" %>
+      </strong>
+      <span class="muted"><%= @product.reserve_price ? "Reserve price set" : "No reserve" %></span>
+    </div>
+
+    <dl class="summary">
+      <dt>Condition</dt><dd><%= @product.condition.humanize %></dd>
+      <% if @product.published? %>
+        <dt>Listed</dt><dd><%= l(@product.published_at.to_date, format: :long) %></dd>
+      <% end %>
+    </dl>
+
+    <h2>Description</h2>
+    <div class="product-description"><%= simple_format(@product.description) %></div>
+
+    <div class="card seller-box">
+      <h2>Seller</h2>
+      <p><strong><%= @product.seller.name %></strong></p>
+      <p class="muted">
+        Member since <%= l(@product.seller.created_at.to_date, format: :long) %> ·
+        <%= pluralize(@product.seller.products.published.count, "live listing") %>
+      </p>
+    </div>
+
+    <% if @product.seller == Current.user %>
+      <div class="form-actions">
+        <%= link_to "Manage this product", new_product_publication_path(@product), class: "button button-secondary" %>
+      </div>
+    <% end %>
+  </section>
+</article>

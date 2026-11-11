@@ -1,0 +1,19 @@
+camera:
+  title: Vintage film camera
+  description: Fully working 35mm camera with original leather case.
+  condition: used
+  starting_price: 1500
+  reserve_price: 3000
+  seller: one
+  category: electronics
+  status: draft
+
+watch:
+  title: Diver watch
+  description: Automatic movement, 200m water resistance.
+  condition: like_new
+  starting_price: 5000
+  seller: two
+  category: fashion
+  status: published
+  published_at: <%= 1.day.ago.to_fs(:db) %>

@@ -1,0 +1,50 @@
+<% content_for :title, "Review – #{@product.title}" %>
+
+<section class="card">
+  <div class="review-header">
+    <h1><%= @product.title %></h1>
+    <%= render "products/status_badge", product: @product %>
+  </div>
+
+  <% if @product.draft? %>
+    <%= render "products/wizard_progress", product: @product, current: nil %>
+  <% end %>
+
+  <dl class="summary">
+    <dt>Category</dt><dd><%= @product.category.name %></dd>
+    <dt>Condition</dt><dd><%= @product.condition.humanize %></dd>
+    <dt>Starting price</dt>
+    <dd><%= @product.priced? ? number_to_currency(@product.starting_price, unit: "฿") : "—" %></dd>
+    <dt>Reserve price</dt>
+    <dd><%= @product.reserve_price ? number_to_currency(@product.reserve_price, unit: "฿") : "No reserve" %></dd>
+    <dt>Photos</dt><dd><%= pluralize(@product.ordered_images.size, "photo") %></dd>
+    <% if @product.published? %>
+      <dt>Published</dt><dd><%= l(@product.published_at, format: :long) %></dd>
+    <% end %>
+  </dl>
+
+  <% if @product.draft? %>
+    <% if @blockers.any? %>
+      <div class="form-errors" role="alert">
+        <p>Finish these before publishing:</p>
+        <ul>
+          <% @blockers.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-actions">
+      <%= link_to "Preview", product_path(@product), class: "button button-secondary" %>
+      <%= link_to "Edit", product_step_path(@product, Product::STEPS.first), class: "button button-secondary" %>
+      <%= button_to "Publish", product_publication_path(@product), class: "button", disabled: @blockers.any? %>
+    </div>
+  <% else %>
+    <div class="form-actions">
+      <%= link_to "View public page", product_path(@product), class: "button" %>
+      <%= button_to "Unpublish", product_publication_path(@product), method: :delete, class: "button button-secondary",
+            form: { data: { turbo_confirm: "Take this product off the site and move it back to drafts?" } } %>
+    </div>
+  <% end %>
+</section>

@@ -1,0 +1,15 @@
+<% content_for :title, "Sell an item" %>
+
+<section class="card">
+  <h1>Sell an item</h1>
+  <%= render "products/wizard_progress", product: @product, current: "details" %>
+
+  <%= form_with model: @product, class: "form" do |form| %>
+    <%= render "shared/form_errors", record: @product %>
+    <%= render "products/steps/details", form: form %>
+
+    <div class="form-actions">
+      <%= form.submit "Next", class: "button" %>
+    </div>
+  <% end %>
+</section>

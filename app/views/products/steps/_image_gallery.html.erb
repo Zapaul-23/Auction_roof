@@ -1,0 +1,24 @@
+<%# locals: (product:) %>
+<% images = product.ordered_images %>
+
+<% if images.any? %>
+  <section class="image-gallery-edit" aria-label="Your photos">
+    <p class="label">Your photos <span class="muted">(the first one is the cover)</span></p>
+    <ul class="image-grid">
+      <% images.each_with_index do |image, index| %>
+        <li class="image-tile" id="<%= dom_id(image) %>">
+          <%= image_tag url_for(image), alt: "Photo #{index + 1} of #{product.title}" %>
+          <% if index.zero? %><span class="badge">Cover</span><% end %>
+          <div class="image-actions">
+            <%= button_to "←", move_product_image_path(product, image, direction: "up"), method: :patch,
+                  class: "button button-small button-secondary", disabled: index.zero?, title: "Move earlier", form_class: "inline" %>
+            <%= button_to "→", move_product_image_path(product, image, direction: "down"), method: :patch,
+                  class: "button button-small button-secondary", disabled: index == images.size - 1, title: "Move later", form_class: "inline" %>
+            <%= button_to "Remove", product_image_path(product, image), method: :delete,
+                  class: "button button-small button-danger", form_class: "inline", form: { data: { turbo_confirm: "Remove this photo?" } } %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>

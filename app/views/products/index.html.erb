@@ -1,0 +1,33 @@
+<% content_for :title, "Auction Roof" %>
+
+<div class="page-header">
+  <h1>Live auctions</h1>
+</div>
+
+<% if @products.any? %>
+  <ul class="product-cards">
+    <% @products.each do |product| %>
+      <li class="card product-card" id="<%= dom_id(product) %>">
+        <%= link_to product_path(product), class: "product-card-link" do %>
+          <div class="product-card-image">
+            <% if (cover = product.cover_image) %>
+              <%= image_tag url_for(cover), alt: "" %>
+            <% else %>
+              <span class="muted">No photo</span>
+            <% end %>
+          </div>
+          <div class="product-card-body">
+            <span class="muted product-category"><%= product.category.name %></span>
+            <strong class="product-card-title"><%= product.title %></strong>
+            <span class="price"><%= number_to_currency(product.starting_price, unit: "฿") %></span>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="card empty-state">
+    <p>No live auctions yet.</p>
+    <%= link_to "Sell an item", new_product_path, class: "button" %>
+  </div>
+<% end %>
