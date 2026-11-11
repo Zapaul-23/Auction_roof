@@ -1,7 +1,10 @@
 # Walks a seller through the "create product" wizard (see Product::STEPS).
-# Every step edits the same, already-saved product.
+# Every step edits the same, already-saved draft product.
 class Products::StepsController < ApplicationController
-  before_action :set_product
+  include SellerProduct
+
+  before_action :set_seller_product
+  before_action :require_draft
   before_action :set_step
 
   def show
@@ -15,7 +18,8 @@ class Products::StepsController < ApplicationController
       @product.assign_attributes(step_params)
     end
 
-    if @product.save(context: @step.to_sym)
+    # "Save draft" keeps whatever is valid so far; "Next" requires the step to be complete.
+    if @product.save(context: saving_draft? ? nil : @step.to_sym)
       redirect_to after_step_path
     else
       render :show, status: :unprocessable_entity
@@ -23,10 +27,6 @@ class Products::StepsController < ApplicationController
   end
 
   private
-    def set_product
-      @product = Current.user.products.find(params[:product_id])
-    end
-
     def set_step
       @step = params[:id]
       raise ActiveRecord::RecordNotFound, "Unknown step" unless Product::STEPS.include?(@step)
@@ -43,12 +43,18 @@ class Products::StepsController < ApplicationController
       @new_images ||= Array(params.dig(:product, :images)).compact_blank
     end
 
+    def saving_draft?
+      params[:save_draft].present?
+    end
+
     def after_step_path
-      if (next_step = Product.next_step(@step))
+      if saving_draft?
+        flash[:notice] = "Draft saved. You can continue later."
+        root_path
+      elsif (next_step = Product.next_step(@step))
         product_step_path(@product, next_step)
       else
-        flash[:notice] = "Product saved."
-        root_path
+        new_product_publication_path(@product)
       end
     end
 end

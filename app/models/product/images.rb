@@ -9,7 +9,7 @@ module Product::Images
     has_many_attached :images
 
     validate :images_are_acceptable
-    validates :images, presence: { message: "must include at least one photo" }, on: :images
+    validates :images, presence: { message: "must include at least one photo" }, on: %i[ images publish ]
   end
 
   # Images in the order the seller arranged them; new uploads go last.

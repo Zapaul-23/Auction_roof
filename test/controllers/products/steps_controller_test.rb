@@ -25,6 +25,11 @@ class Products::StepsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "cannot use an unknown product" do
+    get product_step_path(id: "details", product_id: 0)
+    assert_response :not_found
+  end
+
   test "requires sign in" do
     sign_out
     get product_step_path(@product, "details")
@@ -76,10 +81,19 @@ class Products::StepsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test "saving the last step finishes the wizard" do
-    patch product_step_path(@product, "pricing"), params: { product: { starting_price: 800, reserve_price: "" } }
+  test "save draft keeps progress without requiring the step" do
+    patch product_step_path(@product, "pricing"),
+          params: { save_draft: "1", product: { starting_price: "", reserve_price: "" } }
 
     assert_redirected_to root_path
+    assert_nil @product.reload.starting_price
+    assert @product.draft?
+  end
+
+  test "saving the last step goes to review" do
+    patch product_step_path(@product, "pricing"), params: { product: { starting_price: 800, reserve_price: "" } }
+
+    assert_redirected_to new_product_publication_path(@product)
     @product.reload
     assert_equal 800, @product.starting_price
     assert_nil @product.reserve_price

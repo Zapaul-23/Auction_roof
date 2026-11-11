@@ -1,13 +1,19 @@
 <%# locals: (product:, current:) %>
+<% current_index = Product::STEPS.index(current) || Product::STEPS.size %>
 <ol class="wizard-steps">
   <% Product::STEPS.each_with_index do |step, index| %>
-    <% state = step == current ? "current" : (Product::STEPS.index(current) > index ? "done" : "todo") %>
+    <% state = index == current_index ? "current" : (index < current_index ? "done" : "todo") %>
     <li class="wizard-step wizard-step-<%= state %>">
       <% if product.persisted? && state != "current" %>
         <%= link_to "#{index + 1}. #{step.humanize}", product_step_path(product, step) %>
       <% else %>
         <span><%= index + 1 %>. <%= step.humanize %></span>
       <% end %>
+    </li>
+  <% end %>
+  <% if product.persisted? %>
+    <li class="wizard-step wizard-step-<%= current.nil? ? "current" : "todo" %>">
+      <%= current.nil? ? tag.span("Review") : link_to("Review", new_product_publication_path(product)) %>
     </li>
   <% end %>
 </ol>

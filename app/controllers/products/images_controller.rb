@@ -1,6 +1,9 @@
-# Remove or reorder a single photo of the seller's product.
+# Remove or reorder a single photo of the seller's draft product.
 class Products::ImagesController < ApplicationController
-  before_action :set_product
+  include SellerProduct
+
+  before_action :set_seller_product
+  before_action :require_draft
   before_action :set_image
 
   def destroy
@@ -14,10 +17,6 @@ class Products::ImagesController < ApplicationController
   end
 
   private
-    def set_product
-      @product = Current.user.products.find(params[:product_id])
-    end
-
     def set_image
       @image = @product.images.attachments.find(params[:id])
     end

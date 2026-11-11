@@ -14,7 +14,8 @@
       <% if (previous = Product.previous_step(@step)) %>
         <%= link_to "Back", product_step_path(@product, previous), class: "button button-secondary" %>
       <% end %>
-      <%= form.submit(Product.next_step(@step) ? "Next" : "Save", class: "button") %>
+      <%= form.submit "Save draft", name: "save_draft", class: "button button-secondary", formnovalidate: true %>
+      <%= form.submit(Product.next_step(@step) ? "Next" : "Review", class: "button") %>
     </div>
   <% end %>
 </section>

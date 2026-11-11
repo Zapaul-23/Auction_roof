@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   include Product::Images
+  include Product::Publishing
 
   # Order of the "create product" wizard. Each step validates its own fields.
   STEPS = %w[ details images pricing ].freeze
@@ -15,7 +16,7 @@ class Product < ApplicationRecord
 
   # pricing step: a price is optional while the seller is still on earlier
   # steps, but once given it must make sense.
-  validates :starting_price, presence: true, on: :pricing
+  validates :starting_price, presence: true, on: %i[ pricing publish ]
   validates :starting_price, numericality: { greater_than: 0 }, allow_nil: true
   validates :reserve_price, numericality: { greater_than_or_equal_to: :starting_price }, allow_nil: true,
             if: -> { starting_price.present? }

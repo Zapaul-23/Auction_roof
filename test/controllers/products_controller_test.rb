@@ -1,9 +1,12 @@
 require "test_helper"
 
 class ProductsControllerTest < ActionDispatch::IntegrationTest
-  test "index is public" do
+  test "index is public and only lists published products" do
     get root_url
+
     assert_response :success
+    assert_match products(:watch).title, response.body
+    assert_no_match products(:camera).title, response.body
   end
 
   test "new requires sign in" do

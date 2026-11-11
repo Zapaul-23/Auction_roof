@@ -2,7 +2,7 @@ class ProductsController < ApplicationController
   allow_unauthenticated_access only: %i[ index ]
 
   def index
-    @products = Product.where.not(starting_price: nil).includes(:seller, :category).order(created_at: :desc)
+    @products = Product.live.includes(:seller, :category)
   end
 
   # Step 1 of the wizard: product details.

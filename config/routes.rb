@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :products, only: %i[ index new create ] do
     scope module: :products do
       resources :steps, only: %i[ show update ]
+      resource :publication, only: %i[ new create destroy ]
       resources :images, only: %i[ destroy ] do
         patch :move, on: :member
       end
