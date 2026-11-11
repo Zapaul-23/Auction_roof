@@ -1,0 +1,16 @@
+<% content_for :title, "Products" %>
+
+<h1>Products</h1>
+
+<% if @products.any? %>
+  <ul class="product-list">
+    <% @products.each do |product| %>
+      <li>
+        <strong><%= product.title %></strong>
+        <span><%= number_to_currency(product.starting_price, unit: "฿") %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No products yet.</p>
+<% end %>
